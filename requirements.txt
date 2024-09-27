@@ -1,0 +1,8 @@
+colorzero==2.0
+gpiozero==2.0.1
+lgpio==0.2.2.0
+numpy==2.1.1
+pillow==10.4.0
+pillow_heif==0.18.0
+RPi.GPIO==0.7.1
+spidev==3.6
