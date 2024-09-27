@@ -1,4 +1,8 @@
-e-paper 4 inch on RPI
+# e-paper 4 inch on RPI
+
+## Features
+
+- Take any image and convert to correct size(600x400) and format(BMP) and send to the e-papler display
 
 ## Usage
 
