@@ -61,8 +61,11 @@ def main():
     parser.add_argument("-i", "--image", required=True, help="Path to the input image")
     args = parser.parse_args()
     bitmap = resize_and_crop(args.image)
+    logging.info("Init")
     epd.init()
+    logging.info("Clear")
     epd.Clear()
+    logging.info("Display")
     epd.display(epd.getbuffer(bitmap))
 
 
