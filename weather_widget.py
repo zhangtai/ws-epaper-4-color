@@ -21,6 +21,12 @@ def get_weather_data(lat, lon):
         return None
 
 
+FONT_PATH = "/usr/local/fonts/Noto_Sans_SC/NotoSansSC-Regular.ttf"
+x_large_font = ImageFont.truetype(FONT_PATH, 200)
+large_font = ImageFont.truetype(FONT_PATH, 100)
+medium_font = ImageFont.truetype(FONT_PATH, 50)
+small_font = ImageFont.truetype(FONT_PATH, 40)
+
 # WMO Weather Codes and Descriptions
 wmo_weather_codes = {
     0: "晴",  # Clear sky
@@ -100,24 +106,31 @@ def get_lunar_date():
     return lunar_month, lunar_day
 
 
-# Create the lock screen image
-def create_lock_screen_image():
-    # Weather and lunar data
-    current_temp, max_temp, min_temp, condition_code = get_weather_data(
-        lat=23.1167, lon=113.25
+def add_weather_block(draw, start_x, lat, lon, location_name):
+    draw.text((start_x, 50), location_name, font=small_font, fill=(0, 0, 0))
+
+    current_temp, max_temp, min_temp, condition_code = get_weather_data(lat, lon)
+
+    # Current temperature
+    draw.text((start_x, 50), f"{int(current_temp)}°", font=x_large_font, fill=(0, 0, 0))
+
+    # Weather condition (icon placeholder and description)
+    condition_text = wmo_weather_codes.get(condition_code, "Unknown")
+    draw.text((start_x, 280), condition_text, font=medium_font, fill=(0, 0, 0))
+
+    # Min/Max temperatures
+    draw.text(
+        (start_x, 350),
+        f"最高 {int(max_temp)}° 最低 {int(min_temp)}°",
+        font=small_font,
+        fill=(0, 0, 0),
     )
+
+
+# Create the lock screen image
+def add_calendar_block(draw):
+    # lunar data
     lunar_month, lunar_day = get_lunar_date()
-
-    # Create the blank image
-    img = Image.new("RGB", (1872, 1404), color=(255, 255, 255))
-    draw = ImageDraw.Draw(img)
-
-    # Font paths (adjust paths to Chinese font files)
-    FONT_PATH = "/usr/local/fonts/Noto_Sans_SC/NotoSansSC-Regular.ttf"
-    x_large_font = ImageFont.truetype(FONT_PATH, 200)
-    large_font = ImageFont.truetype(FONT_PATH, 100)
-    medium_font = ImageFont.truetype(FONT_PATH, 50)
-    small_font = ImageFont.truetype(FONT_PATH, 40)
 
     # Get current date info in Chinese
     now = datetime.datetime.now()
@@ -140,31 +153,18 @@ def create_lock_screen_image():
     lunar_date_str = f"{lunar_month}\n{lunar_day}"
     draw.text((350, 230), lunar_date_str, font=medium_font, fill=(0, 0, 0), spacing=10)
 
-    # Draw the right side
-    location = "广州市白云区"  # Hardcoded location in Chinese
-    draw.text(
-        (580, 50), location, font=small_font, fill=(0, 0, 0)
-    )  # Location in Chinese
 
-    # Current temperature
-    draw.text((580, 50), f"{int(current_temp)}°", font=x_large_font, fill=(0, 0, 0))
+if __name__ == "__main__":
+    # Create the blank image
+    img = Image.new("RGB", (1872, 1404), color=(255, 255, 255))
+    draw = ImageDraw.Draw(img)
 
-    # Weather condition (icon placeholder and description)
-    condition_text = wmo_weather_codes.get(condition_code, "Unknown")
-    draw.text((580, 280), condition_text, font=medium_font, fill=(0, 0, 0))
-
-    # Min/Max temperatures
-    draw.text(
-        (580, 350),
-        f"最高 {int(max_temp)}° 最低 {int(min_temp)}°",
-        font=small_font,
-        fill=(0, 0, 0),
-    )
+    add_calendar_block(draw)
+    # Call the new function
+    add_weather_block(draw, 580, 23.157, 113.264, "广州市白云区")
+    add_weather_block(draw, 980, 46.3162, 129.5546, "黑龙江依兰县")
 
     # Save the image
     OUTPUT_PATH = "output/weather.png"
     img.save(OUTPUT_PATH)
     os.system(f"eframe {OUTPUT_PATH} fill")
-
-
-create_lock_screen_image()
