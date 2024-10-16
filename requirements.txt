@@ -6,3 +6,5 @@ pillow==10.4.0
 pillow_heif==0.18.0
 RPi.GPIO==0.7.1
 spidev==3.6
+opencv-python
+lunarcalendar

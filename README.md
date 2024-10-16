@@ -10,3 +10,10 @@
 1. Clonse this repo into the `python` folder
 1. Create venv and install the required dependencies
 1. Example: `python3 paper.py -i ~/Pictures/IMG_9453.HEIC`
+
+
+## dependencies
+
+```bash
+sudo apt install libgl1
+```
