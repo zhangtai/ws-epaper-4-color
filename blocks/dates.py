@@ -56,7 +56,7 @@ def get_lunar_date() -> tuple[str, str]:
     return lunar_month, lunar_day
 
 
-def add_calendar_block(draw: ImageDraw.Draw):
+def add_calendar_block(draw: ImageDraw.Draw, position: tuple[int, int]):
     logging.info("Drawing date block start")
     # lunar data
     lunar_month, lunar_day = get_lunar_date()
@@ -69,12 +69,20 @@ def add_calendar_block(draw: ImageDraw.Draw):
     day = f"{now.day}"
 
     # Draw the left side
-    draw.text((100, 50), weekday, font=fonts.large, fill=(255, 0, 0))
-    draw.text((300, 50), month, font=fonts.large, fill=(192, 192, 192))
+    draw.text(position, weekday, font=fonts.large, fill=(255, 0, 0))
+    draw.text(
+        (position[0] + 200, position[1]), month, font=fonts.large, fill=(192, 192, 192)
+    )
 
-    draw.text((100, 150), day, font=fonts.x_large, fill=(0, 0, 0))
+    draw.text((position[0], position[1] + 100), day, font=fonts.x_large, fill=(0, 0, 0))
 
     # Lunar date vertically
     lunar_date_str = f"{lunar_month}\n{lunar_day}"
-    draw.text((350, 230), lunar_date_str, font=fonts.medium, fill=(0, 0, 0), spacing=10)
+    draw.text(
+        (position[0] + 250, position[1] + 180),
+        lunar_date_str,
+        font=fonts.medium,
+        fill=(0, 0, 0),
+        spacing=10,
+    )
     logging.info("Drawing date block completed")
